@@ -1,0 +1,36 @@
+<script src="../simpletest.js"></script>
+<script src="../is-prototype-of.js"></script>
+<script>
+tests({
+  /*'isPrototypeOf\'s first parameter should be an object.': function() {
+    isPrototypeOf({})
+  },
+  'isPrototypeOf\'s second parameter should have a prototype.': function() {
+    fail();
+  },*/
+  'isPrototypeOf should return true if the prototype is the same as the prototype of the prototypedObject.': function() {
+    var prototype = {};
+    var prototypedObject = Object.create(prototype);
+
+    eq(true, isPrototypeOf(prototype, prototypedObject));
+  },
+  'isPrototypeOf should return true if the prototype is the same as any of the prototypes in the prototype chain of the prototypedObject.': function() {
+    var prototype = {};
+    var secondPrototype = Object.create(prototype);
+    var prototypedObject = Object.create(secondPrototype);
+
+    eq(true, isPrototypeOf(prototype, prototypedObject));
+  },
+  'isPrototypeOf should throw a TypeError if the prototype argument is undefined or null.': function () {
+    var error = false;
+    try {
+      isPrototypeOf(undefined, {});
+    }
+    catch (e) {
+      error = true;
+      eq(true, e instanceof TypeError);
+    }
+    eq(true, error);
+  }
+});
+</script>
