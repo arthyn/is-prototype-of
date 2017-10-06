@@ -1,26 +1,41 @@
 <script src="../simpletest.js"></script>
 <script src="../is-prototype-of.js"></script>
 <script>
+/*
+*       Test Objects
+*/
+var canine = {
+  bark: function() {
+    console.log('bark');
+  }
+};
+
+var dog = Object.create(canine);
+dog.fetch = function() {
+  console.log('fetch');
+};
+
+var myDog = Object.create(dog);
+var empty = Object.create(null);
+
 tests({
-  /*'isPrototypeOf\'s first parameter should be an object.': function() {
-    isPrototypeOf({})
-  },
-  'isPrototypeOf\'s second parameter should have a prototype.': function() {
-    fail();
-  },*/
+
   'isPrototypeOf should return true if the prototype is the same as the prototype of the prototypedObject.': function() {
-    var prototype = {};
-    var prototypedObject = Object.create(prototype);
-
-    eq(true, isPrototypeOf(prototype, prototypedObject));
+    eq(true, isPrototypeOf(dog, myDog));
   },
+
   'isPrototypeOf should return true if the prototype is the same as any of the prototypes in the prototype chain of the prototypedObject.': function() {
-    var prototype = {};
-    var secondPrototype = Object.create(prototype);
-    var prototypedObject = Object.create(secondPrototype);
-
-    eq(true, isPrototypeOf(prototype, prototypedObject));
+    eq(true, isPrototypeOf(canine, myDog));
   },
+
+  'isPrototypeOf should return false if the prototype is not the same as any of the prototypes in the prototype chain of the prototypedObject.': function() {
+    eq(false, isPrototypeOf(dog, empty));
+  },
+
+  'isPrototype should return true if Object.prototype is used as the prototype argument': function() {
+    eq(true, isPrototypeOf(Object.prototype, myDog));
+  },
+
   'isPrototypeOf should throw a TypeError if the prototype argument is undefined or null.': function () {
     var error = false;
     try {
